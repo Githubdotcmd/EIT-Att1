@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f5b93">
+<title>Programming Fundamentals</title>
+<style>
+:root{
+  --primary:#0f5b93;--primary2:#0a416a;--accent:#f59e0b;
+  --bg:#f4f8fc;--card:#fff;--text:#14212b;--muted:#64748b;
+  --line:#dbe6ef;--shadow:0 18px 55px rgba(15,91,147,.13);
+  --radius:24px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,
+  "Segoe UI",Arial,sans-serif;color:var(--text);background:
+  radial-gradient(circle at 10% 0%,rgba(15,91,147,.11),transparent 28%),
+  radial-gradient(circle at 90% 10%,rgba(245,158,11,.10),transparent 25%),
+  linear-gradient(180deg,#eef6fc 0,#f8fbfd 420px,var(--bg) 100%);
+  min-height:100vh;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.container{width:min(1180px,calc(100% - 30px));margin:auto}
+.topbar{
+  height:72px;position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(15px);
+  border-bottom:1px solid rgba(219,230,239,.9)
+}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900;color:var(--primary2)}
+.brand img{width:42px;height:42px;object-fit:contain;border-radius:10px}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.pill{
+  border:1px solid var(--line);background:#fff;color:var(--primary2);
+  padding:9px 13px;border-radius:12px;font-weight:800
+}
+.hero{
+  margin:30px 0 22px;background:rgba(255,255,255,.94);border:1px solid var(--line);
+  border-radius:32px;box-shadow:var(--shadow);overflow:hidden
+}
+.hero-main{
+  display:grid;grid-template-columns:150px 1fr 150px;gap:24px;align-items:center;
+  padding:35px 38px 28px
+}
+.hero-logo{width:128px;height:128px;object-fit:contain;justify-self:start;border-radius:18px}
+.hero-photo{
+  width:138px;height:138px;border-radius:50%;object-fit:cover;justify-self:end;
+  border:6px solid #fff;box-shadow:0 10px 28px rgba(15,91,147,.18);background:#eaf3fa
+}
+.hero-copy{text-align:center}
+.kicker{
+  display:inline-flex;padding:8px 13px;border-radius:999px;background:#eaf4fb;
+  color:var(--primary);font-size:12px;font-weight:900;letter-spacing:.7px;text-transform:uppercase
+}
+h1{font-size:clamp(30px,5vw,56px);line-height:1.02;margin:15px 0 10px;letter-spacing:-2px}
+.subtitle{margin:0 auto;color:var(--muted);max-width:720px;font-size:clamp(14px,2vw,17px);line-height:1.6}
+.meta{
+  display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);
+  background:#fbfdff
+}
+.meta div{padding:18px;text-align:center;border-right:1px solid var(--line)}
+.meta div:last-child{border-right:0}
+.meta span{display:block;font-size:11px;color:var(--muted);font-weight:900;letter-spacing:.5px;text-transform:uppercase}
+.meta strong{display:block;color:var(--primary2);font-size:17px;margin-top:4px}
+.section-head{text-align:center;margin:36px 0 18px}
+.section-head h2{margin:0;font-size:clamp(23px,3vw,32px)}
+.section-head p{margin:7px 0 0;color:var(--muted)}
+.groups{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:17px;margin-bottom:40px
+}
+.group{
+  position:relative;text-decoration:none;color:inherit;background:var(--card);
+  border:1px solid var(--line);border-radius:22px;padding:23px;min-height:205px;
+  box-shadow:0 9px 28px rgba(15,91,147,.08);transition:.2s ease;overflow:hidden
+}
+.group:before{
+  content:"";position:absolute;width:110px;height:110px;border-radius:50%;
+  background:rgba(15,91,147,.07);right:-38px;top:-38px
+}
+.group:hover{transform:translateY(-5px);box-shadow:0 18px 42px rgba(15,91,147,.15);border-color:#b7d1e2}
+.group-number{
+  width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+  background:#eaf4fb;color:var(--primary);font-weight:950;font-size:17px
+}
+.group h3{margin:20px 0 6px;font-size:21px}
+.group p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+.open-label{display:inline-flex;margin-top:18px;color:var(--primary);font-size:12px;font-weight:900}
+.footer{
+  text-align:center;color:#7b90a2;font-size:12px;padding:14px 0 28px
+}
+.secret{user-select:none;cursor:pointer;display:inline-block;padding:6px 12px;border-radius:10px}
+.secret:hover{background:#edf4f8}
+.modal-bg{
+  position:fixed;inset:0;background:rgba(3,18,31,.58);backdrop-filter:blur(5px);
+  z-index:100;display:none;align-items:center;justify-content:center;padding:15px
+}
+.modal-bg.show{display:flex}
+.modal{
+  width:min(980px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:25px;
+  box-shadow:0 35px 100px rgba(0,0,0,.28)
+}
+.modal-head{
+  position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;padding:18px 20px
+}
+.modal-head h2{margin:0;font-size:20px}
+.close{
+  width:38px;height:38px;border:0;border-radius:11px;background:#eef3f7;
+  color:#506273;font-size:20px
+}
+.admin-body{padding:20px}
+.notice{
+  padding:12px 14px;border-radius:13px;background:#eef7ff;color:#20567d;
+  font-size:13px;line-height:1.5;margin-bottom:16px
+}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{
+  border:1px solid var(--line);border-radius:17px;padding:16px;background:#fbfdff
+}
+.card h3{margin:0 0 13px;font-size:15px}
+.field{margin-bottom:11px}
+label{display:block;color:#5b7081;font-size:11px;font-weight:900;margin-bottom:6px}
+input[type=text],input[type=url],input[type=file]{
+  width:100%;height:42px;border:1px solid var(--line);border-radius:10px;
+  padding:0 11px;background:#fff;color:var(--text);outline:none
+}
+input:focus{border-color:#6da8cf;box-shadow:0 0 0 3px rgba(15,91,147,.1)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.btn{
+  border:0;border-radius:11px;min-height:42px;padding:0 14px;font-weight:850
+}
+.primary{background:var(--primary);color:#fff}
+.light{background:#edf3f7;color:var(--primary2)}
+.danger{background:#fee2e2;color:#991b1b}
+.preview{
+  width:90px;height:90px;object-fit:cover;border-radius:14px;border:1px dashed #b9c8d4;
+  background:#fff;margin-bottom:9px
+}
+.preview.round{border-radius:50%}
+.status{font-size:12px;color:var(--muted);font-weight:750;margin-top:9px}
+@media(max-width:850px){
+  .groups{grid-template-columns:repeat(2,1fr)}
+  .hero-main{grid-template-columns:95px 1fr 95px;padding:25px 20px}
+  .hero-logo{width:90px;height:90px}.hero-photo{width:95px;height:95px}
+}
+@media(max-width:600px){
+  .container{width:min(100% - 20px,1180px)}
+  .topbar{height:62px}.brand span{font-size:13px}
+  .top-actions .pill{font-size:11px;padding:8px}
+  .hero{margin-top:18px;border-radius:23px}
+  .hero-main{grid-template-columns:1fr;gap:12px;text-align:center;padding:24px 16px 20px}
+  .hero-logo,.hero-photo{justify-self:center}
+  .hero-logo{width:82px;height:82px}.hero-photo{width:96px;height:96px}
+  .hero-copy{order:-1}
+  h1{letter-spacing:-1px}
+  .meta{grid-template-columns:1fr}
+  .meta div{border-right:0;border-bottom:1px solid var(--line);padding:13px}
+  .meta div:last-child{border-bottom:0}
+  .groups{grid-template-columns:1fr;gap:12px}
+  .group{min-height:175px}
+  .admin-grid,.row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="container" style="display:flex;align-items:center;width:100%">
+    <div class="brand"><img id="miniLogo" src="eit-logo.jpg" alt="Logo"><span id="brandText">Programming Fundamentals</span></div>
+    <div class="top-actions"><button class="pill" onclick="scrollToGroups()">Select Section ↓</button></div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div class="hero-main">
+      <img id="eitLogo" class="hero-logo" src="eit-logo.jpg" alt="EIT Logo">
+      <div class="hero-copy">
+        <span class="kicker" id="kicker">Student Portal</span>
+        <h1 id="mainTitle">Programming Fundamentals</h1>
+        <p class="subtitle" id="subtitle">Select your section below to open your student directory.</p>
+      </div>
+      <img id="personalPhoto" class="hero-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect width='300' height='300' fill='%23eaf3fa'/%3E%3Ccircle cx='150' cy='112' r='55' fill='%239ab8cc'/%3E%3Cpath d='M65 285c10-72 48-105 85-105s75 33 85 105' fill='%236d9bb8'/%3E%3Ctext x='150' y='30' text-anchor='middle' font-family='Arial' font-size='18' fill='%230f5b93'%3EYour Photo%3C/text%3E%3C/svg%3E" alt="Your photo">
+    </div>
+    <div class="meta">
+      <div><span>Subject</span><strong id="subject">Programming Fundamentals</strong></div>
+      <div><span>Faculty</span><strong id="faculty">EIT</strong></div>
+      <div><span>Academic Portal</span><strong id="portalText">Student Directory</strong></div>
+    </div>
+  </section>
+
+  <section id="groups">
+    <div class="section-head">
+      <h2 id="groupsTitle">Choose Your Section</h2>
+      <p id="groupsSubtitle">Open the required group. Each section runs as its own page.</p>
+    </div>
+    <div class="groups" id="groupGrid"></div>
+  </section>
+
+  <footer class="footer">
+    <span class="secret" id="secretText">© <span id="year"></span> <span id="footerText">Programming Fundamentals</span></span>
+  </footer>
+</main>
+
+<div class="modal-bg" id="adminModal" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Admin Panel — Landing Page</h2>
+      <button class="close" onclick="closeAdmin()">×</button>
+    </div>
+    <div class="admin-body">
+      <div class="notice">All changes made here are stored in this browser using local storage. The four section HTML files are not modified by this page.</div>
+      <div class="admin-grid">
+        <div class="card">
+          <h3>Page Information</h3>
+          <div class="field"><label>BRAND / MINI TITLE</label><input id="aBrand" type="text"></div>
+          <div class="field"><label>MAIN TITLE</label><input id="aTitle" type="text"></div>
+          <div class="field"><label>KICKER</label><input id="aKicker" type="text"></div>
+          <div class="field"><label>SUBTITLE</label><input id="aSubtitle" type="text"></div>
+          <div class="row">
+            <div class="field"><label>SUBJECT</label><input id="aSubject" type="text"></div>
+            <div class="field"><label>FACULTY</label><input id="aFaculty" type="text"></div>
+          </div>
+          <div class="field"><label>PORTAL LABEL</label><input id="aPortal" type="text"></div>
+          <div class="field"><label>SECTION HEADING</label><input id="aGroupsTitle" type="text"></div>
+          <div class="field"><label>SECTION DESCRIPTION</label><input id="aGroupsSubtitle" type="text"></div>
+          <div class="field"><label>FOOTER TEXT</label><input id="aFooter" type="text"></div>
+        </div>
+
+        <div class="card">
+          <h3>Logo & Personal Image</h3>
+          <label>EIT / MAIN LOGO</label>
+          <img id="logoPreview" class="preview" alt="Logo preview">
+          <input id="logoUpload" type="file" accept="image/*">
+          <div style="height:12px"></div>
+          <label>YOUR PHOTO</label>
+          <img id="photoPreview" class="preview round" alt="Photo preview">
+          <input id="photoUpload" type="file" accept="image/*">
+          <div class="actions">
+            <button class="btn light" onclick="resetImages()">Reset Images</button>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column:1/-1">
+          <h3>Section Links — change title, description or destination file</h3>
+          <div id="groupAdmin"></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" onclick="saveAdmin()">Save All Changes</button>
+        <button class="btn light" onclick="closeAdmin()">Cancel</button>
+        <button class="btn danger" onclick="resetAll()">Reset Landing Page</button>
+      </div>
+      <div class="status" id="adminStatus"></div>
+    </div>
+  </div>
+</div>
+
+<script src="pf-cloud-config.js"></script>
+<script>window.PF_SECTION_KEY="landing";</script>
+<script>
+/* Shared cloud persistence layer. Keeps the existing UI/functionality unchanged. */
+window.PF_CLOUD = (()=>{
+  const base=(window.PF_CLOUD_DB_URL||"").replace(/\/$/,'');
+  const enabled=!!base && !base.includes('YOUR-PROJECT');
+  const key=(window.PF_SECTION_KEY||'landing').replace(/[^A-Za-z0-9_-]/g,'_');
+  const url=()=>`${base}/programming_fundamentals/${key}.json`;
+  async function read(){ if(!enabled) return null; const r=await fetch(url(),{cache:'no-store'}); if(!r.ok) throw new Error('Cloud read failed'); return await r.json(); }
+  async function write(data){ if(!enabled) return false; const r=await fetch(url(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); if(!r.ok) throw new Error('Cloud save failed'); return true; }
+  return {enabled,read,write};
+})();
+</script>
+<script>
+const DEFAULT = {
+  brand:"Programming Fundamentals",
+  title:"Programming Fundamentals",
+  kicker:"Student Portal",
+  subtitle:"Select your section below to open your student directory.",
+  subject:"Programming Fundamentals",
+  faculty:"EIT",
+  portal:"Student Directory",
+  groupsTitle:"Choose Your Section",
+  groupsSubtitle:"Open the required group. Each section runs as its own page.",
+  footer:"Programming Fundamentals",
+  logo:"eit-logo.jpg",
+  photo:"1000102961.jpg",
+  groups:[
+    {title:"Section 1A",desc:"Open the Section 1A student directory.",file:"EIT_Programming_Fundamentals_Section_1A.html"},
+    {title:"Section 1B",desc:"Open the Section 1B student directory.",file:"EIT_Programming_Fundamentals_Section_1B.html"},
+    {title:"Section 1C",desc:"Open the Section 1C student directory.",file:"EIT_Programming_Fundamentals_Section_1C.html"},
+    {title:"Section A2B2",desc:"Open the Section A2B2 student directory.",file:"EIT_Programming_Fundamentals_Section_A2B2.html"}
+  ]
+};
+let settings = {...DEFAULT,groups:DEFAULT.groups.map(x=>({...x}))};
+let secretClicks=0, secretTimer=null;
+
+async function loadSettings(){
+  try{
+    if(window.PF_CLOUD&&PF_CLOUD.enabled){const cloud=await PF_CLOUD.read();if(cloud&&typeof cloud==='object') return Object.assign({},DEFAULT,cloud);}
+  }catch(e){}
+  try{return Object.assign({},DEFAULT,JSON.parse(localStorage.getItem("pf_landing_settings")||"null")||{});}
+  catch(e){return {...DEFAULT,groups:DEFAULT.groups.map(x=>({...x}))}}
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function apply(){
+  document.title=settings.title||DEFAULT.title;
+  document.getElementById("brandText").textContent=settings.brand;
+  document.getElementById("mainTitle").textContent=settings.title;
+  document.getElementById("kicker").textContent=settings.kicker;
+  document.getElementById("subtitle").textContent=settings.subtitle;
+  document.getElementById("subject").textContent=settings.subject;
+  document.getElementById("faculty").textContent=settings.faculty;
+  document.getElementById("portalText").textContent=settings.portal;
+  document.getElementById("groupsTitle").textContent=settings.groupsTitle;
+  document.getElementById("groupsSubtitle").textContent=settings.groupsSubtitle;
+  document.getElementById("footerText").textContent=settings.footer;
+  document.getElementById("year").textContent=new Date().getFullYear();
+  const logo=settings.logo||DEFAULT.logo;
+  document.getElementById("eitLogo").src=logo;
+  document.getElementById("miniLogo").src=logo;
+  document.getElementById("personalPhoto").src=settings.photo||DEFAULT.photo||document.getElementById("personalPhoto").src;
+  const grid=document.getElementById("groupGrid");
+  grid.innerHTML=settings.groups.map((g,i)=>`
+    <a class="group" href="${esc(g.file)}" aria-label="Open ${esc(g.title)}">
+      <div class="group-number">${i+1}</div>
+      <h3>${esc(g.title)}</h3>
+      <p>${esc(g.desc)}</p>
+      <span class="open-label">Open Section →</span>
+    </a>`).join("");
+}
+async function openAdmin(){
+  settings=await loadSettings();
+  fillAdmin();
+  document.getElementById("adminModal").classList.add("show");
+  document.getElementById("adminModal").setAttribute("aria-hidden","false");
+}
+function closeAdmin(){
+  document.getElementById("adminModal").classList.remove("show");
+  document.getElementById("adminModal").setAttribute("aria-hidden","true");
+}
+function fillAdmin(){
+  for(const [id,key] of [["aBrand","brand"],["aTitle","title"],["aKicker","kicker"],["aSubtitle","subtitle"],
+    ["aSubject","subject"],["aFaculty","faculty"],["aPortal","portal"],["aGroupsTitle","groupsTitle"],
+    ["aGroupsSubtitle","groupsSubtitle"],["aFooter","footer"]]) document.getElementById(id).value=settings[key]||"";
+  document.getElementById("logoPreview").src=settings.logo||DEFAULT.logo;
+  document.getElementById("photoPreview").src=settings.photo||document.getElementById("personalPhoto").src;
+  document.getElementById("groupAdmin").innerHTML=settings.groups.map((g,i)=>`
+    <div style="border-top:1px solid var(--line);padding:13px 0">
+      <div class="row">
+        <div class="field"><label>SECTION ${i+1} TITLE</label><input id="gt${i}" type="text" value="${esc(g.title)}"></div>
+        <div class="field"><label>DESTINATION HTML FILE</label><input id="gf${i}" type="text" value="${esc(g.file)}"></div>
+      </div>
+      <div class="field"><label>DESCRIPTION</label><input id="gd${i}" type="text" value="${esc(g.desc)}"></div>
+    </div>`).join("");
+}
+function saveAdmin(){
+  const keys=[["aBrand","brand"],["aTitle","title"],["aKicker","kicker"],["aSubtitle","subtitle"],
+    ["aSubject","subject"],["aFaculty","faculty"],["aPortal","portal"],["aGroupsTitle","groupsTitle"],
+    ["aGroupsSubtitle","groupsSubtitle"],["aFooter","footer"]];
+  keys.forEach(([id,key])=>settings[key]=document.getElementById(id).value.trim());
+  settings.groups=settings.groups.map((g,i)=>({
+    title:document.getElementById("gt"+i).value.trim()||g.title,
+    file:document.getElementById("gf"+i).value.trim()||g.file,
+    desc:document.getElementById("gd"+i).value.trim()||g.desc
+  }));
+  localStorage.setItem("pf_landing_settings",JSON.stringify(settings));
+  if(window.PF_CLOUD&&PF_CLOUD.enabled) PF_CLOUD.write(settings).catch(()=>{});
+  apply();
+  document.getElementById("adminStatus").textContent="Saved successfully.";
+  setTimeout(()=>document.getElementById("adminStatus").textContent="",1800);
+}
+function resetImages(){
+  settings.logo=DEFAULT.logo;settings.photo="";
+  document.getElementById("logoPreview").src=DEFAULT.logo;
+  document.getElementById("photoPreview").src=document.getElementById("personalPhoto").src;
+}
+function resetAll(){
+  if(!confirm("Reset all landing-page customizations? The four section files will remain unchanged.")) return;
+  localStorage.removeItem("pf_landing_settings");
+  if(window.PF_CLOUD&&PF_CLOUD.enabled) PF_CLOUD.write(DEFAULT).catch(()=>{});
+  settings={...DEFAULT,groups:DEFAULT.groups.map(x=>({...x}))};apply();fillAdmin();
+}
+function imageToData(file,cb){
+  const r=new FileReader();r.onload=()=>cb(r.result);r.readAsDataURL(file);
+}
+document.getElementById("logoUpload").addEventListener("change",e=>{
+  const f=e.target.files[0];if(f) imageToData(f,data=>{settings.logo=data;document.getElementById("logoPreview").src=data});
+});
+document.getElementById("photoUpload").addEventListener("change",e=>{
+  const f=e.target.files[0];if(f) imageToData(f,data=>{settings.photo=data;document.getElementById("photoPreview").src=data});
+});
+document.getElementById("secretText").addEventListener("click",()=>{
+  secretClicks++;clearTimeout(secretTimer);
+  secretTimer=setTimeout(()=>secretClicks=0,3500);
+  if(secretClicks>=5){secretClicks=0;openAdmin();}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAdmin()});
+document.getElementById("adminModal").addEventListener("click",e=>{if(e.target.id==="adminModal")closeAdmin()});
+function scrollToGroups(){document.getElementById("groups").scrollIntoView({behavior:"smooth"})}
+loadSettings().then(x=>{settings=x;apply();
+  if(window.PF_CLOUD&&PF_CLOUD.enabled){setInterval(async()=>{try{const x=await PF_CLOUD.read();if(x&&typeof x==='object'){settings=Object.assign({},DEFAULT,x);apply();}}catch(e){}},3000);}
+});
+</script>
+</body>
+</html>
